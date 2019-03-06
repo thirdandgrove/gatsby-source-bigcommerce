@@ -40,6 +40,6 @@ options: {
 
 ### TODO
 
-[ ] implement node-gatsby APIs
-[ ] schema validation
-[ ] multiple endpoint support
+ - [ ] implement node-gatsby APIs
+ - [ ] schema validation
+ - [ ] multiple endpoint support
