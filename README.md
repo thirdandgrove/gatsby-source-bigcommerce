@@ -37,6 +37,7 @@ options: {
   secret: 'YourClientSecret',
   accessToken: 'yourAccessToken',
   storeHash: 'yourSiteHash',
+  endpoint: '/catalog/products'
 }
 ```
 

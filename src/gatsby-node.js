@@ -35,7 +35,7 @@ exports.sourceNodes = (
     return nodeData;
   };
 
-  bigCommerce
+  return bigCommerce
     .get(configOptions.endpoint)
     .then(res => res.data.map(datum => handleGenerateNodes(datum)));
 };

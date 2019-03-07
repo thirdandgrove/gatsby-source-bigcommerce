@@ -113,7 +113,6 @@ class BigCommerce {
   }
 
   async request(type, path, data) {
-    console.log('config: ', this.config);
     if (!this.config.accessToken || !this.config.storeHash) {
       throw new Error(
         'Get request error: the access token and store hash are required to ' +
