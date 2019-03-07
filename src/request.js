@@ -3,8 +3,6 @@
 const https = require('https'),
   zlib = require('zlib');
 
-const { version } = require('../package.json');
-
 /**
  * Parse response
  */
@@ -64,7 +62,7 @@ class Request {
       port: 443,
       headers: Object.assign(
         {
-          'User-Agent': 'gatsby-source-bigcommerce/' + version,
+          'User-Agent': 'gatsby-source-bigcommerce',
           'Content-Type': 'application/json',
           'Accept-Encoding': 'gzip, deflate'
         },

@@ -18,8 +18,7 @@
  * }
  */
 
-const logger = require('debug')('node-bigcommerce:bigcommerce'),
-  crypto = require('crypto'),
+const crypto = require('crypto'),
   Request = require('./request');
 
 class BigCommerce {
@@ -27,12 +26,12 @@ class BigCommerce {
     if (!config) {
       throw new Error(
         'Config missing. The config object is required to make any call to the ' +
-        'BigCommerce API'
+          'BigCommerce API'
       );
     }
 
     this.config = config;
-    this.apiVersion = this.config.apiVersion || 'v2';
+    this.apiVersion = this.config.apiVersion || 'v3';
   }
 
   verify(signedRequest) {
@@ -44,7 +43,7 @@ class BigCommerce {
     if (splitRequest.length < 2) {
       throw new Error(
         'The signed request will come in two parts seperated by a .(full stop). ' +
-        'this signed request contains less than 2 parts.'
+          'this signed request contains less than 2 parts.'
       );
     }
 
@@ -55,7 +54,8 @@ class BigCommerce {
     logger('JSON: ' + json);
     logger('Signature: ' + signature);
 
-    const expected = crypto.createHmac('sha256', this.config.secret)
+    const expected = crypto
+      .createHmac('sha256', this.config.secret)
       .update(json)
       .digest('hex');
 
@@ -63,7 +63,10 @@ class BigCommerce {
 
     if (
       expected.length !== signature.length ||
-      !crypto.timingSafeEqual(Buffer.from(expected, 'utf8'), Buffer.from(signature, 'utf8'))
+      !crypto.timingSafeEqual(
+        Buffer.from(expected, 'utf8'),
+        Buffer.from(signature, 'utf8')
+      )
     ) {
       throw new Error('Signature is invalid');
     }
@@ -78,7 +81,7 @@ class BigCommerce {
     const payload = {
       client_id: this.config.clientId,
       client_secret: this.config.secret,
-      redirect_uri: this.config.callback,
+      // redirect_uri: this.config.callback,
       grant_type: 'authorization_code',
       code: query.code,
       scope: query.scope,
@@ -93,7 +96,10 @@ class BigCommerce {
   }
 
   createAPIRequest() {
-    const accept = this.config.responseType === 'xml' ? 'application/xml' : 'application/json';
+    const accept =
+      this.config.responseType === 'xml'
+        ? 'application/xml'
+        : 'application/json';
 
     return new Request('api.bigcommerce.com', {
       headers: {
@@ -107,10 +113,11 @@ class BigCommerce {
   }
 
   async request(type, path, data) {
+    console.log('config: ', this.config);
     if (!this.config.accessToken || !this.config.storeHash) {
       throw new Error(
         'Get request error: the access token and store hash are required to ' +
-        'call the BigCommerce API'
+          'call the BigCommerce API'
       );
     }
 

@@ -4,11 +4,6 @@ exports.sourceNodes = (
   { actions, createNodeId, createContentDigest },
   configOptions
 ) => {
-  // validate options from user config
-  // validation may be redundant and node-bigcommerce
-  // logs errors when configs are not present
-  // create bigcommerce instace
-
   const bigCommerce = new BigCommerce({
     clientId: configOptions.clientId,
     accessToken: configOptions.accessToken,
@@ -17,9 +12,30 @@ exports.sourceNodes = (
 
   // TODO: let user define multiple endpoints?
   // TODO: handle schema validation
-  return configOptions.endpoint
-    ? bigCommerce.get(configOptions.endpoint).then(data => {})
-    : console.log(
-        'You have not provided a Big Commerce API endpoint, please add one to your gatsby-config.js'
-      );
+
+  if (!configOptions.endpoint) {
+    console.log(
+      'You have not provided a Big Commerce API endpoint, please add one to your gatsby-config.js'
+    );
+    return;
+  }
+  const handleGenerateNodes = node => {
+    const nodeId = createNodeId(`randomUser-${node.id}`);
+    const nodeContent = JSON.stringify(node);
+    const nodeData = Object.assign({}, node, {
+      id: nodeId,
+      parent: null,
+      children: [],
+      internal: {
+        type: `BigCommerceNode`,
+        content: nodeContent,
+        contentDigest: createContentDigest(node)
+      }
+    });
+    return nodeData;
+  };
+
+  bigCommerce
+    .get(configOptions.endpoint)
+    .then(res => res.data.map(datum => handleGenerateNodes(datum)));
 };
