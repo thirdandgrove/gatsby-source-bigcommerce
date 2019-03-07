@@ -33,11 +33,10 @@ example configuration:
 ```
 options: {
   logLevel: 'info',
-  clientId: 'hjasdfhj09sasd80dsf04dfhg90rsds',
-  secret: 'odpdf83m40fmxcv0345cvfgh73bdwjc',
-  callback: 'https://mysite.com/bigcommerce'
-  accessToken: 'ly8cl3wwcyj12vpechm34fd20oqpnl',
-  storeHash: 'x62tqn',
+  clientId: 'yourClientID',
+  secret: 'YourClientSecret',
+  accessToken: 'yourAccessToken',
+  storeHash: 'yourSiteHash',
 }
 ```
 
@@ -48,3 +47,7 @@ options: {
 - [ ] implement node-bigcommerce to wrap API
 - [ ] implement node-fetch instead of https
 - [ ] multiple endpoint support?
+
+#### credit
+
+this is based on [node-bigcommerce](https://github.com/getconversio/node-bigcommerce)
