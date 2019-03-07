@@ -1,17 +1,20 @@
 {
   "name": "gatsby-source-bigcommerce",
-  "version": "0.0.5",
-  "description": "gatsby plugin for big commerce api",
-  "main": "index.js",
+  "version": "0.1.1",
+  "description": "gatsby plugin for Big Commerce api",
   "scripts": {
-    "build": "babel src --out-dir ."
+    "build": "babel src --out-dir .",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "gatsby",
+    "gatsby-plugin",
+    "gatsby-source-bigcommerce",
     "plugin",
     "source",
     "big",
     "commerce",
+    "bigcommerce",
     "api"
   ],
   "author": "Grant Glidewell <grant@thirdandgrove.com>",

@@ -76,13 +76,10 @@ class Request {
       options.headers['Content-Length'] = Buffer.from(dataString).length;
     }
 
-    console.log('Starting Request, with options.', options);
+    console.log('Starting Big Commerce Request');
 
     return new Promise((resolve, reject) => {
       const req = https.request(options, res => {
-        console.log('Status Returned: ' + res.statusCode);
-        console.log('Headers Returned: ' + JSON.stringify(res.headers));
-
         const contentEncoding = res.headers['content-encoding'];
         const shouldUnzip = ['deflate', 'gzip'].indexOf(contentEncoding) !== -1;
         const encoding = shouldUnzip ? 'binary' : 'utf8';
