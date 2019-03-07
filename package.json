@@ -1,10 +1,15 @@
 {
   "name": "gatsby-source-bigcommerce",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "gatsby plugin for Big Commerce api",
   "scripts": {
     "build": "babel src --out-dir .",
     "prepublishOnly": "npm run build"
+  },
+  "hompage": "https://github.com/grantglidewell/gatsby-source-bigcommerce/blob/master/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/grantglidewell/gatsby-source-bigcommerce"
   },
   "keywords": [
     "gatsby",
