@@ -4,6 +4,8 @@ exports.sourceNodes = (
   { actions, createNodeId, createContentDigest },
   configOptions
 ) => {
+  const { createNode } = actions;
+
   const bigCommerce = new BigCommerce({
     clientId: configOptions.clientId,
     accessToken: configOptions.accessToken,
@@ -39,5 +41,5 @@ exports.sourceNodes = (
 
   return bigCommerce
     .get(configOptions.endpoint)
-    .then(res => res.data.map(datum => handleGenerateNodes(datum)));
+    .then(res => res.data.map(datum => createNode(handleGenerateNodes(datum))));
 };
