@@ -1,10 +1,12 @@
-const BigCommerce = require('node-bigcommerce');
+const BigCommerce = require('./bigcommerce');
 
 exports.sourceNodes = (
   { actions, createNodeId, createContentDigest },
   configOptions
 ) => {
   // validate options from user config
+  // validation may be redundant and node-bigcommerce
+  // logs errors when configs are not present
   // create bigcommerce instace
 
   const bigCommerce = new BigCommerce({
@@ -15,7 +17,9 @@ exports.sourceNodes = (
 
   // TODO: let user define multiple endpoints?
   // TODO: handle schema validation
-  bigCommerce.get('/products').then(data => {
-    // Catch any errors, or handle the data returned
-  });
+  return configOptions.endpoint
+    ? bigCommerce.get(configOptions.endpoint).then(data => {})
+    : console.log(
+        'You have not provided a Big Commerce API endpoint, please add one to your gatsby-config.js'
+      );
 };
