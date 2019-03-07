@@ -7,6 +7,8 @@ exports.sourceNodes = (
   const bigCommerce = new BigCommerce({
     clientId: configOptions.clientId,
     accessToken: configOptions.accessToken,
+    secret: configOptions.secret,
+    storeHash: configOptions.storeHash,
     responseType: 'json'
   });
 

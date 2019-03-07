@@ -1,6 +1,6 @@
 {
   "name": "gatsby-source-bigcommerce",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "gatsby plugin for big commerce api",
   "main": "index.js",
   "scripts": {
