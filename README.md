@@ -26,7 +26,7 @@ module.exports = {
 
 ## Configuration options
 
-follows node-bigcommerce sdk
+follows [node-bigcommerce](https://github.com/getconversio/node-bigcommerce) api
 
 example configuration:
 
