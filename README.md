@@ -32,20 +32,23 @@ example configuration:
 
 ```
 options: {
+
   // REQUIRED
   clientId: 'yourClientID',
   secret: 'YourClientSecret',
   accessToken: 'yourAccessToken',
   storeHash: 'yourSiteHash',
   endpoint: '/catalog/products',
+
   // OPTIONAL
   logLevel: 'info',
-  nodeName: 'BigCommerceNode'
+  nodeName: 'BigCommerceNode',
+
+  // Multiple endpoints in an object.
   endpoints: {
-    // Multiple endpoints in an object.
-    nodeNameOne : '/catalog/products',
-    nodeNameTwo: ''
-    },
+        BigCommerceProducts: "/catalog/products",
+        BigCommerceCategories: "/catalog/categories",
+      }
 }
 ```
 
