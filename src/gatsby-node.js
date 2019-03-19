@@ -14,15 +14,15 @@ exports.sourceNodes = (
     responseType: 'json'
   });
 
-  // TODO: let user define multiple endpoints?
-  // TODO: handle schema validation
-
   if (!configOptions.endpoint) {
     console.log(
       'You have not provided a Big Commerce API endpoint, please add one to your gatsby-config.js'
     );
     return;
   }
+
+  let nodeName = config.nodeName || `BigCommerceNode`;
+
   const handleGenerateNodes = node => {
     const nodeId = createNodeId(`randomUser-${node.id}`);
     const nodeContent = JSON.stringify(node);
@@ -31,7 +31,7 @@ exports.sourceNodes = (
       parent: null,
       children: [],
       internal: {
-        type: `BigCommerceNode`,
+        type: nodeName,
         content: nodeContent,
         contentDigest: createContentDigest(node)
       }
@@ -39,7 +39,20 @@ exports.sourceNodes = (
     return nodeData;
   };
 
-  return bigCommerce
-    .get(configOptions.endpoint)
-    .then(res => res.data.map(datum => createNode(handleGenerateNodes(datum))));
+  if (typeof configOptions.endpoint === 'string') {
+    return bigCommerce
+      .get(configOptions.endpoint)
+      .then(res =>
+        res.data.map(datum => createNode(handleGenerateNodes(datum)))
+      );
+  } else {
+    // Assume the user provided an array of endpoints
+    return configOptions.endpoint.map(endpoint =>
+      bigCommerce
+        .get(endpoint)
+        .then(res =>
+          res.data.map(datum => createNode(handleGenerateNodes(datum)))
+        )
+    );
+  }
 };

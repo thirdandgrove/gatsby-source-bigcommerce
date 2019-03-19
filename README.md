@@ -1,6 +1,6 @@
 # gatsby-source-bigcommerce
 
-This source plugin makes Big Commerce api data available in gatsby.js
+This source plugin makes Big Commerce api data available in gatsby.js sites
 
 ## Installation
 
@@ -17,7 +17,7 @@ module.exports = {
     {
       resolve: 'gatsby-source-bigcommerce',
       options: {
-        // options
+        ...
       }
     }
   ]
@@ -32,12 +32,17 @@ example configuration:
 
 ```
 options: {
-  logLevel: 'info',
+  // REQUIRED
   clientId: 'yourClientID',
   secret: 'YourClientSecret',
   accessToken: 'yourAccessToken',
   storeHash: 'yourSiteHash',
-  endpoint: '/catalog/products'
+  endpoint: '/catalog/products',
+  // OPTIONAL
+  logLevel: 'info',
+  nodeName: 'BigCommerceNode'
+  endpoint: ['/catalog/products', '/catalog/'], // multiple endpoints in an array
+
 }
 ```
 
