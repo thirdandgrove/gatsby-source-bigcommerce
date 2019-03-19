@@ -22,7 +22,10 @@
     "bigcommerce",
     "api"
   ],
-  "author": "Grant Glidewell <grant@thirdandgrove.com>",
+  "author": "Third and Grove <https://www.thirdandgrove.com>",
+  "contributors": [
+    "Grant Glidewell <grant@thirdandgrove.com>"
+  ],
   "license": "MIT",
   "dependencies": {
     "babel-preset-gatsby-package": "^0.1.3"

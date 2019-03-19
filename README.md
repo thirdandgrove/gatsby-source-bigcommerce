@@ -61,9 +61,3 @@ options: {
 #### credit
 
 thanks to all the contributors to [node-bigcommerce](https://github.com/getconversio/node-bigcommerce)
-
-### TODO
-
-- [x] implement node-bigcommerce to wrap API
-- [ ] implement node-fetch instead of https
-- [ ] multiple endpoint support?
