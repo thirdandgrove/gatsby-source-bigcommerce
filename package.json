@@ -1,6 +1,6 @@
 {
   "name": "gatsby-source-bigcommerce",
-  "version": "0.1.6",
+  "version": "0.1.8",
   "description": "gatsby plugin for Big Commerce api",
   "scripts": {
     "build": "babel src --out-dir .",

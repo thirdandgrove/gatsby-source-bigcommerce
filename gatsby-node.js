@@ -39,11 +39,7 @@ exports.sourceNodes = ({
     return nodeData;
   };
 
-  if (configOptions.endpoint) {
-    // Fetch and create nodes for a single endpoint.
-    return bigCommerce.get(configOptions.endpoint).then(res => res.data.map(datum => createNode(handleGenerateNodes(datum, configOptions.nodeName || `BigCommerceNode`))));
-  } else {
-    // Fetch and create nodes from multiple endpoints
-    return Object.entries(configOptions.endpoints).map(([nodeName, endpoint]) => bigCommerce.get(endpoint).then(res => res.data.map(datum => createNode(handleGenerateNodes(datum, nodeName)))));
-  }
+  return configOptions.endpoint ? // Fetch and create nodes for a single endpoint.
+  bigCommerce.get(configOptions.endpoint).then(res => res.data.map(datum => createNode(handleGenerateNodes(datum, configOptions.nodeName || `BigCommerceNode`)))) : // Fetch and create nodes from multiple endpoints
+  Object.entries(configOptions.endpoints).map(([nodeName, endpoint]) => bigCommerce.get(endpoint).then(res => res.data.map(datum => createNode(handleGenerateNodes(datum, nodeName)))));
 };
