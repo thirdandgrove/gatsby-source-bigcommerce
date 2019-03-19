@@ -23,19 +23,17 @@ exports.sourceNodes = (
   }
 
   const handleGenerateNodes = (node, name) => {
-    const nodeId = createNodeId(node.id);
-    const nodeContent = JSON.stringify(node);
-    const nodeData = Object.assign({}, node, {
-      id: nodeId,
+    return {
+      ...node,
+      id: createNodeId(`${name}-${node.id}`),
       parent: null,
       children: [],
       internal: {
         type: name,
-        content: nodeContent,
+        content: JSON.stringify(node),
         contentDigest: createContentDigest(node)
       }
-    });
-    return nodeData;
+    };
   };
 
   return configOptions.endpoint
@@ -53,13 +51,15 @@ exports.sourceNodes = (
           )
         )
     : // Fetch and create nodes from multiple endpoints
-      Object.entries(configOptions.endpoints).map(([nodeName, endpoint]) =>
-        bigCommerce
-          .get(endpoint)
-          .then(res =>
-            res.data.map(datum =>
-              createNode(handleGenerateNodes(datum, nodeName))
+      Promise.all(
+        Object.entries(configOptions.endpoints).map(([nodeName, endpoint]) =>
+          bigCommerce
+            .get(endpoint)
+            .then(res =>
+              res.data.map(datum =>
+                createNode(handleGenerateNodes(datum, nodeName))
+              )
             )
-          )
+        )
       );
 };
