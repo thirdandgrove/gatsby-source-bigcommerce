@@ -23,7 +23,7 @@ exports.sourceNodes = ({
     return;
   }
 
-  let nodeName = config.nodeName || `BigCommerceNode`;
+  let nodeName = configOptions.nodeName || `BigCommerceNode`;
 
   const handleGenerateNodes = node => {
     const nodeId = createNodeId(`randomUser-${node.id}`);

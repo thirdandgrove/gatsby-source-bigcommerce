@@ -41,8 +41,11 @@ options: {
   // OPTIONAL
   logLevel: 'info',
   nodeName: 'BigCommerceNode'
-  endpoint: ['/catalog/products', '/catalog/'], // multiple endpoints in an array
-
+  endpoints: {
+    // Multiple endpoints in an object.
+    nodeNameOne : '/catalog/products',
+    nodeNameTwo: ''
+    },
 }
 ```
 
