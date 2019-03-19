@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const BigCommerce = require('./bigcommerce');
 
@@ -18,22 +18,20 @@ exports.sourceNodes = ({
     responseType: 'json'
   });
 
-  if (!configOptions.endpoint) {
+  if (!configOptions.endpoint && !configOptions.endpoints) {
     console.log('You have not provided a Big Commerce API endpoint, please add one to your gatsby-config.js');
     return;
   }
 
-  let nodeName = configOptions.nodeName || `BigCommerceNode`;
-
-  const handleGenerateNodes = node => {
-    const nodeId = createNodeId(`randomUser-${node.id}`);
+  const handleGenerateNodes = (node, name) => {
+    const nodeId = createNodeId(node.id);
     const nodeContent = JSON.stringify(node);
     const nodeData = Object.assign({}, node, {
       id: nodeId,
       parent: null,
       children: [],
       internal: {
-        type: nodeName,
+        type: name,
         content: nodeContent,
         contentDigest: createContentDigest(node)
       }
@@ -41,10 +39,11 @@ exports.sourceNodes = ({
     return nodeData;
   };
 
-  if (typeof configOptions.endpoint === 'string') {
-    return bigCommerce.get(configOptions.endpoint).then(res => res.data.map(datum => createNode(handleGenerateNodes(datum))));
+  if (configOptions.endpoint) {
+    // Fetch and create nodes for a single endpoint.
+    return bigCommerce.get(configOptions.endpoint).then(res => res.data.map(datum => createNode(handleGenerateNodes(datum, configOptions.nodeName || `BigCommerceNode`))));
   } else {
-    // Assume the user provided an array of endpoints
-    return configOptions.endpoint.map(endpoint => bigCommerce.get(endpoint).then(res => res.data.map(datum => createNode(handleGenerateNodes(datum)))));
+    // Fetch and create nodes from multiple endpoints
+    return Object.entries(configOptions.endpoints).map(([nodeName, endpoint]) => bigCommerce.get(endpoint).then(res => res.data.map(datum => createNode(handleGenerateNodes(datum, nodeName)))));
   }
 };

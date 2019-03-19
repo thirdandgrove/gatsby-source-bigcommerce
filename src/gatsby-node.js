@@ -1,3 +1,5 @@
+'use strict';
+
 const BigCommerce = require('./bigcommerce');
 
 exports.sourceNodes = (
@@ -5,7 +7,6 @@ exports.sourceNodes = (
   configOptions
 ) => {
   const { createNode } = actions;
-
   const bigCommerce = new BigCommerce({
     clientId: configOptions.clientId,
     accessToken: configOptions.accessToken,
@@ -14,7 +15,7 @@ exports.sourceNodes = (
     responseType: 'json'
   });
 
-  if (!configOptions.endpoint) {
+  if (!configOptions.endpoint && !configOptions.endpoints) {
     console.log(
       'You have not provided a Big Commerce API endpoint, please add one to your gatsby-config.js'
     );
