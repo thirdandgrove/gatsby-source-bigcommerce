@@ -69,6 +69,22 @@ options: {
 }
 ```
 
+## Preview
+
+This currently supports use in Gatsby Cloud.
+Preview **only supports product updates**
+add the `preview` key to options as shown
+
+```javascript
+options: {
+  preview: true;
+}
+```
+
+Once your instance is deployed in Gatsby could, get your preview URL and add it as an environment variable under the key `SITE_HOSTNAME`.
+
+Restart your instance and preview should be live.
+
 #### credit
 
 thanks to all the contributors to [node-bigcommerce](https://github.com/getconversio/node-bigcommerce)
