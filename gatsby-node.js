@@ -61,14 +61,17 @@ exports.sourceNodes = async ({
     await fetch(`https://api.bigcommerce.com/stores/${storeHash}/v2/hooks`, {
       method: 'POST',
       headers: {
-        Accept: application / json,
-        'Content-Type': application / json,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         'X-Auth-Client': clientId,
-        'X-Auth-Token': accessToken,
+        'X-Auth-Token': accessToken
+      },
+      body: JSON.stringify({
         scope: 'store/product/updated',
+        is_active: true,
         destination: `${process.env.SITE_HOSTNAME}/___BCPreview`
-      }
-    });
+      })
+    }).then(res => res.json());
     const server = micro(async (req, res) => {
       const request = await micro.json(req);
       const productId = request.data.id; // webhooks dont send any information, just an id
@@ -77,13 +80,13 @@ exports.sourceNodes = async ({
       const nodeToUpdate = newProduct.data;
 
       if (nodeToUpdate.id) {
-        createNode(handleGenerateNodes(nodeToUpdate, createNodeId));
-        console.log('\x1b[32m', `Updated node: ${node.id}`);
+        createNode(handleGenerateNodes(nodeToUpdate, nodeName || `BigCommerceNode`));
+        console.log('\x1b[32m', `Updated node: ${nodeToUpdate.id}`);
       }
 
       res.end('ok');
     });
-    server.listen(8000, console.log('\x1b[32m', `listening to changes for live preview at route /___BCPreview`));
+    server.listen(8033, console.log('\x1b[32m', `listening to changes for live preview at route /___BCPreview`));
   }
 };
 
@@ -91,7 +94,7 @@ exports.onCreateDevServer = ({
   app
 }) => {
   app.use('/___BCPreview/', proxy({
-    target: `http://localhost:8000`,
+    target: `http://localhost:8033`,
     secure: false
   }));
 };
