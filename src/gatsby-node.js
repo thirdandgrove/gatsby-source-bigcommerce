@@ -1,21 +1,35 @@
 'use strict';
 
 const BigCommerce = require('./bigcommerce');
+const micro = require(`micro`);
+const fetch = require('node-fetch');
+const proxy = require('http-proxy-middleware');
 
-exports.sourceNodes = (
+exports.sourceNodes = async (
   { actions, createNodeId, createContentDigest },
   configOptions
 ) => {
   const { createNode } = actions;
+  const {
+    endpoint,
+    endpoints,
+    clientId,
+    secret,
+    storeHash,
+    accessToken,
+    preview,
+    nodeName
+  } = configOptions;
+
   const bigCommerce = new BigCommerce({
-    clientId: configOptions.clientId,
-    accessToken: configOptions.accessToken,
-    secret: configOptions.secret,
-    storeHash: configOptions.storeHash,
+    clientId: clientId,
+    accessToken: accessToken,
+    secret: secret,
+    storeHash: storeHash,
     responseType: 'json'
   });
 
-  if (!configOptions.endpoint && !configOptions.endpoints) {
+  if (!endpoint && !endpoints) {
     console.log(
       'You have not provided a Big Commerce API endpoint, please add one to your gatsby-config.js'
     );
@@ -25,7 +39,7 @@ exports.sourceNodes = (
   const handleGenerateNodes = (node, name) => {
     return {
       ...node,
-      id: createNodeId(`${name}-${node.id}`),
+      id: createNodeId(node.id),
       parent: null,
       children: [],
       internal: {
@@ -36,23 +50,20 @@ exports.sourceNodes = (
     };
   };
 
-  return configOptions.endpoint
+  endpoint
     ? // Fetch and create nodes for a single endpoint.
-      bigCommerce
-        .get(configOptions.endpoint)
+      await bigCommerce
+        .get(endpoint)
         .then(res =>
           res.data.map(datum =>
             createNode(
-              handleGenerateNodes(
-                datum,
-                configOptions.nodeName || `BigCommerceNode`
-              )
+              handleGenerateNodes(datum, nodeName || `BigCommerceNode`)
             )
           )
         )
     : // Fetch and create nodes from multiple endpoints
-      Promise.all(
-        Object.entries(configOptions.endpoints).map(([nodeName, endpoint]) =>
+      await Promise.all(
+        Object.entries(endpoints).map(([nodeName, endpoint]) =>
           bigCommerce
             .get(endpoint)
             .then(res =>
@@ -62,4 +73,55 @@ exports.sourceNodes = (
             )
         )
       );
+
+  if (process.env.NODE_ENV === 'development' && preview) {
+    // make a fetch request to subscribe to webhook from BC.
+    await fetch(`https://api.bigcommerce.com/stores/${storeHash}/v2/hooks`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'X-Auth-Client': clientId,
+        'X-Auth-Token': accessToken
+      },
+      body: JSON.stringify({
+        scope: 'store/product/updated',
+        is_active: true,
+        destination: `${process.env.SITE_HOSTNAME}/___BCPreview`
+      })
+    }).then(res => res.json());
+    const server = micro(async (req, res) => {
+      const request = await micro.json(req);
+      const productId = request.data.id;
+      // webhooks dont send any information, just an id
+      const newProduct = await bigCommerce.get(
+        `/catalog/products/${productId}`
+      );
+      const nodeToUpdate = newProduct.data;
+      if (nodeToUpdate.id) {
+        createNode(
+          handleGenerateNodes(nodeToUpdate, nodeName || `BigCommerceNode`)
+        );
+        console.log('\x1b[32m', `Updated node: ${nodeToUpdate.id}`);
+      }
+      res.end('ok');
+    });
+    server.listen(
+      8033,
+      console.log(
+        '\x1b[32m',
+        `listening to changes for live preview at route /___BCPreview`
+      )
+    );
+  }
+};
+
+exports.onCreateDevServer = ({ app }) => {
+  app.use(
+    '/___BCPreview/',
+    proxy({
+      target: `http://localhost:8033`,
+      secure: false
+    })
+  );
 };

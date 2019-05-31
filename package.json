@@ -1,12 +1,12 @@
 {
   "name": "gatsby-source-bigcommerce",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "gatsby plugin for Big Commerce api",
   "scripts": {
     "build": "babel src --out-dir .",
     "prepublishOnly": "npm run build"
   },
-  "hompage": "https://github.com/thirdandgrove/gatsby-source-bigcommerce/blob/master/README.md",
+  "homepage": "https://github.com/thirdandgrove/gatsby-source-bigcommerce/blob/master/README.md",
   "repository": {
     "type": "git",
     "url": "https://github.com/thirdandgrove/gatsby-source-bigcommerce"
@@ -28,7 +28,9 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "babel-preset-gatsby-package": "^0.1.3"
+    "babel-preset-gatsby-package": "^0.1.3",
+    "micro": "^9.3.4",
+    "node-fetch": "^2.6.0"
   },
   "peerDependencies": {
     "gatsby": "^2.0.0"
