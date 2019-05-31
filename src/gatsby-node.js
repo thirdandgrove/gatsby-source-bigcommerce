@@ -84,7 +84,7 @@ exports.sourceNodes = async (
         'X-Auth-Client': clientId,
         'X-Auth-Token': accessToken,
         scope: 'store/product/updated',
-        destination: `${process.env.publicURL}/___BCPreview`
+        destination: `${process.env.SITE_HOSTNAME}/___BCPreview`
       }
     });
     const server = micro(async (req, res) => {
