@@ -20,6 +20,8 @@
 const crypto = require('crypto'),
       Request = require('./request');
 
+const currentVersion = require('./package.json').version;
+
 class BigCommerce {
   constructor(config) {
     if (!config) {
@@ -80,7 +82,10 @@ class BigCommerce {
       headers: {
         Accept: accept,
         'X-Auth-Client': this.config.clientId,
-        'X-Auth-Token': this.config.accessToken
+        'X-Auth-Token': this.config.accessToken,
+        'X-Client-Type': 'Gatsby',
+        'X-Client-Name': 'gatsby-source-bigcommerce',
+        'X-Plugin-Version': currentVersion
       },
       failOnLimitReached: this.config.failOnLimitReached,
       agent: this.config.agent
