@@ -42,6 +42,7 @@ exports.sourceNodes = async ({
   const handleGenerateNodes = (node, name) => {
     return { ...node,
       id: createNodeId(node.id),
+      bigcommerce_id: node.id,
       parent: null,
       children: [],
       internal: {
