@@ -20,6 +20,16 @@ function parseResponse(res, body, resolve, reject) {
       return reject(err);
     }
 
+    if (json.data.length) {
+      // For BC API responses that return arrays, copy the id returned to a 'bc_id' field so
+      // it can still be referenced after the Gatsby generated id overwrites it
+      json.data.forEach(function(entity) {
+        if (entity.id) {
+          entity.bc_id = entity.id;
+        }
+      });
+    }
+
     return resolve(json);
   } catch (e) {
     e.responseBody = body;
