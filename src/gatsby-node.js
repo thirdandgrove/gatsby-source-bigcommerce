@@ -40,6 +40,7 @@ exports.sourceNodes = async (
     return {
       ...node,
       id: createNodeId(node.id),
+      bigcommerce_id: node.id,
       parent: null,
       children: [],
       internal: {
