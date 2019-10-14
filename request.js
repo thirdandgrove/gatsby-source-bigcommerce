@@ -21,11 +21,11 @@ function parseResponse(res, body, resolve, reject) {
     }
 
     if (json.data.length) {
-      // For BC API responses that return arrays, copy the id returned to a 'bc_id' field so
+      // For BC API responses that return arrays, copy the id returned to a 'bigcommerce_id' field so
       // it can still be referenced after the Gatsby generated id overwrites it
       json.data.forEach(function(entity) {
         if (entity.id) {
-          entity.bc_id = entity.id;
+          entity.bigcommerce_id = entity.id;
         }
       });
     }
