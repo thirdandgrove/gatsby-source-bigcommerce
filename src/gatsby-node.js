@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const BigCommerce = require('./bigcommerce');
+const BigCommerce = require("./bigcommerce");
 const micro = require(`micro`);
-const fetch = require('node-fetch');
-const proxy = require('http-proxy-middleware');
+const fetch = require("node-fetch");
+const proxy = require("http-proxy-middleware");
 
 exports.sourceNodes = async (
   { actions, createNodeId, createContentDigest },
@@ -18,7 +18,8 @@ exports.sourceNodes = async (
     storeHash,
     accessToken,
     preview,
-    nodeName
+    nodeName,
+    apiVersion = "v2"
   } = configOptions;
 
   const bigCommerce = new BigCommerce({
@@ -26,12 +27,12 @@ exports.sourceNodes = async (
     accessToken: accessToken,
     secret: secret,
     storeHash: storeHash,
-    responseType: 'json'
+    responseType: "json"
   });
 
   if (!endpoint && !endpoints) {
     console.log(
-      'You have not provided a Big Commerce API endpoint, please add one to your gatsby-config.js'
+      "You have not provided a Big Commerce API endpoint, please add one to your gatsby-config.js"
     );
     return;
   }
@@ -75,22 +76,25 @@ exports.sourceNodes = async (
         )
       );
 
-  if (process.env.NODE_ENV === 'development' && preview) {
+  if (process.env.NODE_ENV === "development" && preview) {
     // make a fetch request to subscribe to webhook from BC.
-    await fetch(`https://api.bigcommerce.com/stores/${storeHash}/v2/hooks`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'X-Auth-Client': clientId,
-        'X-Auth-Token': accessToken
-      },
-      body: JSON.stringify({
-        scope: 'store/product/updated',
-        is_active: true,
-        destination: `${process.env.SITE_HOSTNAME}/___BCPreview`
-      })
-    }).then(res => res.json());
+    await fetch(
+      `https://api.bigcommerce.com/stores/${storeHash}/${apiVersion}/hooks`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "X-Auth-Client": clientId,
+          "X-Auth-Token": accessToken
+        },
+        body: JSON.stringify({
+          scope: "store/product/updated",
+          is_active: true,
+          destination: `${process.env.SITE_HOSTNAME}/___BCPreview`
+        })
+      }
+    ).then(res => res.json());
     const server = micro(async (req, res) => {
       const request = await micro.json(req);
       const productId = request.data.id;
@@ -103,14 +107,14 @@ exports.sourceNodes = async (
         createNode(
           handleGenerateNodes(nodeToUpdate, nodeName || `BigCommerceNode`)
         );
-        console.log('\x1b[32m', `Updated node: ${nodeToUpdate.id}`);
+        console.log("\x1b[32m", `Updated node: ${nodeToUpdate.id}`);
       }
-      res.end('ok');
+      res.end("ok");
     });
     server.listen(
       8033,
       console.log(
-        '\x1b[32m',
+        "\x1b[32m",
         `listening to changes for live preview at route /___BCPreview`
       )
     );
@@ -119,7 +123,7 @@ exports.sourceNodes = async (
 
 exports.onCreateDevServer = ({ app }) => {
   app.use(
-    '/___BCPreview/',
+    "/___BCPreview/",
     proxy({
       target: `http://localhost:8033`,
       secure: false
