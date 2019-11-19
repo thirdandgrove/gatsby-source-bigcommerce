@@ -25,13 +25,14 @@ exports.sourceNodes = async ({
     accessToken,
     preview,
     nodeName,
-    apiVersion = "v2"
+    apiVersion
   } = configOptions;
   const bigCommerce = new BigCommerce({
-    clientId: clientId,
-    accessToken: accessToken,
-    secret: secret,
-    storeHash: storeHash,
+    clientId,
+    accessToken,
+    secret,
+    storeHash,
+    apiVersion,
     responseType: "json"
   });
 
@@ -60,7 +61,7 @@ exports.sourceNodes = async ({
 
   if (process.env.NODE_ENV === "development" && preview) {
     // make a fetch request to subscribe to webhook from BC.
-    await fetch(`https://api.bigcommerce.com/stores/${storeHash}/${apiVersion}/hooks`, {
+    await fetch(`https://api.bigcommerce.com/stores/${storeHash}/${apiVersion || `v3`}/hooks`, {
       method: "POST",
       headers: {
         Accept: "application/json",
