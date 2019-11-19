@@ -43,6 +43,7 @@ options: {
   // OPTIONAL
   logLevel: 'info',
   nodeName: 'BigCommerceNode',
+  apiVersion: 'v2'
 
   // Multiple endpoints in an object.
   endpoints: {
