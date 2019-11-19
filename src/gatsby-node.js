@@ -69,11 +69,11 @@ exports.sourceNodes = async (
         Object.entries(endpoints).map(([nodeName, endpoint]) =>
           bigCommerce
             .get(endpoint)
-            .then(res =>
-              res.data.map(datum =>
-                createNode(handleGenerateNodes(datum, nodeName))
-              )
-            )
+            .then(res => {
+              // If the data object is not on the response, it could be v2 which returns an array as the root, so use that as a fallback
+              const resData = res.data ? res.data : res;
+              return resData.map(datum => createNode(handleGenerateNodes(datum, nodeName)))
+            })
         )
       );
 
