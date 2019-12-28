@@ -28,11 +28,10 @@ module.exports = {
 
 follows [node-bigcommerce](https://github.com/getconversio/node-bigcommerce) api
 
-example configuration:
+example configuration for a single `endpoint`:
 
 ```
 options: {
-
   // REQUIRED
   clientId: 'yourClientID',
   secret: 'YourClientSecret',
@@ -44,12 +43,20 @@ options: {
   logLevel: 'info',
   nodeName: 'BigCommerceNode',
   apiVersion: 'v2'
+}
+```
 
-  // Multiple endpoints in an object.
+If you want to return data from multiple endpoints, use `endpoints` instead. You can find a list of endpoints [here](https://developer.bigcommerce.com/api-reference/).
+
+```
+options: {
+  ...
+
+  // Create a nodeName and map it to a BigCommerce endpoint
   endpoints: {
-        BigCommerceProducts: "/catalog/products",
-        BigCommerceCategories: "/catalog/categories",
-      }
+    BigCommerceProducts: "/catalog/products",
+    BigCommerceCategories: "/catalog/categories",
+  }
 }
 ```
 
@@ -82,7 +89,7 @@ options: {
 }
 ```
 
-Once your instance is deployed in Gatsby could, get your preview URL and add it as an environment variable under the key `SITE_HOSTNAME`.
+Once your instance is deployed in Gatsby Cloud, get your preview URL and add it as an environment variable under the key `SITE_HOSTNAME`.
 
 Restart your instance and preview should be live.
 
