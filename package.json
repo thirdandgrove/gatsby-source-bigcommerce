@@ -38,6 +38,7 @@
   "devDependencies": {
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
-    "cross-env": "^5.1.4"
+    "cross-env": "^5.1.4",
+    "http-proxy-middleware": "^1.0.5"
   }
 }
