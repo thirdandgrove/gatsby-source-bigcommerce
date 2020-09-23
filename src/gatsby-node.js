@@ -3,7 +3,7 @@
 const BigCommerce = require("./bigcommerce");
 const micro = require(`micro`);
 const fetch = require("node-fetch");
-const proxy = require("http-proxy-middleware");
+const { createProxyMiddleware } = require('http-proxy-middleware')
 
 exports.sourceNodes = async (
   { actions, createNodeId, createContentDigest },
@@ -124,7 +124,7 @@ exports.sourceNodes = async (
 exports.onCreateDevServer = ({ app }) => {
   app.use(
     "/___BCPreview/",
-    proxy({
+    createProxyMiddleware({
       target: `http://localhost:8033`,
       secure: false
     })
