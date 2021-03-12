@@ -93,8 +93,28 @@ class BigCommerce {
     const request = new Request('login.bigcommerce.com', {
       failOnLimitReached: this.config.failOnLimitReached
     });
+    
+    let response = await request.run(type, fullPath, data);
+    if('meta' in response) {
+      const totalPages = response.meta.pagination.total_pages
+      const currentPage = response.meta.pagination.current_page
 
-    return await request.run('post', '/oauth2/token', payload);
+      if(totalPages > currentPage) {
+        let pages = []
+        for (let nextPage = (currentPage + 1); nextPage <= totalPages; nextPage++) {
+          const newUrl = new URL(fullPath, 'http://example.com');
+          newUrl.searchParams.set('page', nextPage);
+          pages.push(request.run(type, `${newUrl.pathname}${newUrl.search}`, data));
+        }
+        pages = await Promise.all(pages)
+        pages.forEach(pageResponse => {
+          response.data = response.data.concat(pageResponse.data)
+        })
+        response.meta.pagination = {}
+      }
+    }
+
+    return response;
   }
 
   createAPIRequest() {
