@@ -108,7 +108,37 @@ class BigCommerce {
       fullPath += path;
     }
 
-    return await request.run(type, fullPath, data);
+    const response = await request.run(type, fullPath, data);
+
+    // If response contains pagination.
+    if ('meta' in response && 'pagination' in response.meta) {
+      const {
+        total_pages: totalPages,
+        current_page: currentPage
+      } = response.meta.pagination;
+      // If current page is not the last page.
+      if (totalPages > currentPage) {
+        // Collect all page request promises in array.
+        const promises = [];
+        for (let nextPage = currentPage + 1; nextPage <= totalPages; nextPage++) {
+          const endpointUrl = new URL(fullPath, `https://${request.hostname}`);
+          // Safely assign `page` query parameter to endpoint URL.
+          endpointUrl.searchParams.set('page', nextPage);
+          // Add promise to array for future Promise.All() call.
+          promises.push(request.run(type, `${endpointUrl.pathname}${endpointUrl.search}`, data));
+        }
+        // Request all endpoints in parallel.
+        const responses = await Promise.all(promises);
+        responses.forEach(pageResponse => {
+          response.data = response.data.concat(pageResponse.data);
+        });
+        // Set pager to last page.
+        response.meta.pagination.total_pages = totalPages;
+        response.meta.pagination.current_page = totalPages;
+      }
+    }
+
+    return response;
   }
 
   async get(path) {
