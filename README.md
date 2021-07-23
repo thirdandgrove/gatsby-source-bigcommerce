@@ -1,6 +1,6 @@
-# gatsby-source-bigcommerce
+# gatsby-source-bigcommerce-v2
 
-This source plugin makes Big Commerce api data available in gatsby.js sites
+This source plugin makes BigCommerce API data available in GatsbyJS sites
 
 ## Installation
 
@@ -26,9 +26,9 @@ module.exports = {
 
 ## Configuration options
 
-follows [node-bigcommerce](https://github.com/getconversio/node-bigcommerce) api
+Follows [node-bigcommerce-v2](https://github.com/guyromellemagayano/node-bigcommerce-v2) api
 
-example configuration for a single `endpoint`:
+Example configuration for a single `endpoint`:
 
 ```
 options: {
@@ -85,7 +85,7 @@ add the `preview` key to options as shown
 
 ```javascript
 options: {
-  preview: true;
+	preview: true;
 }
 ```
 
@@ -93,6 +93,6 @@ Once your instance is deployed in Gatsby Cloud, get your preview URL and add it 
 
 Restart your instance and preview should be live.
 
-#### credit
+#### Credit
 
 thanks to all the contributors to [node-bigcommerce](https://github.com/getconversio/node-bigcommerce)
