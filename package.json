@@ -5,7 +5,7 @@
   "scripts": {
     "build": "babel src --out-dir ./dist",
     "prepublishOnly": "npm run build",
-    "release": "dotenv release-it --"
+    "release": "dotenv release-it --dry-run"
   },
   "homepage": "https://github.com/guyromellemagayano/gatsby-source-bigcommerce-v2/blob/master/README.md",
   "repository": {
@@ -50,7 +50,8 @@
   "release-it": {
     "npm": {
       "publish": true,
-      "publishPath": "./dist"
+      "publishPath": "./dist",
+      "skipChecks": true
     },
     "git": {
       "commitMessage": "chore: release v${version}",
