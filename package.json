@@ -59,7 +59,8 @@
     },
     "github": {
       "release": true,
-      "releaseNotes": "generate-release-notes.sh ${latestVersion} ${version}"
+      "releaseNotes": "generate-release-notes.sh ${latestVersion} ${version}",
+      "skipChecks": true
     },
     "plugins": {
       "@release-it/conventional-changelog": {
