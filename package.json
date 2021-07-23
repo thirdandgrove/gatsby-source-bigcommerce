@@ -4,7 +4,8 @@
   "description": "Updated Gatsby plugin for BigCommerce API",
   "scripts": {
     "build": "babel src --out-dir .",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "release": "dotenv release-it --"
   },
   "homepage": "https://github.com/guyromellemagayano/gatsby-source-bigcommerce-v2/blob/master/README.md",
   "repository": {
@@ -41,6 +42,17 @@
   "devDependencies": {
     "@babel/cli": "^7.14.8",
     "@babel/core": "^7.14.8",
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "dotenv-cli": "^4.0.0",
+    "release-it": "*"
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "chore: release v${version}",
+      "changelog": "git log --pretty=format:\"* %s (%h)\" ${from}...${to}"
+    },
+    "github": {
+      "release": true
+    }
   }
 }
