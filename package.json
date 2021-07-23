@@ -54,12 +54,10 @@
       "skipChecks": true
     },
     "git": {
-      "commitMessage": "chore: release v${version}",
       "changelog": "git log --pretty=format:\"* %s (%h)\" ${from}...${to}"
     },
     "github": {
       "release": true,
-      "releaseNotes": "generate-release-notes.sh ${latestVersion} ${version}",
       "skipChecks": true
     }
   }
