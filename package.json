@@ -3,7 +3,7 @@
   "version": "0.4.2",
   "description": "Updated Gatsby plugin for BigCommerce API",
   "scripts": {
-    "build": "babel src --out-dir .",
+    "build": "babel src --out-dir ./dist",
     "prepublishOnly": "npm run build",
     "release": "dotenv release-it --"
   },
@@ -42,17 +42,29 @@
   "devDependencies": {
     "@babel/cli": "^7.14.8",
     "@babel/core": "^7.14.8",
+    "@release-it/conventional-changelog": "^3.0.1",
     "cross-env": "^7.0.3",
     "dotenv-cli": "^4.0.0",
-    "release-it": "*"
+    "release-it": "^14.10.0"
   },
   "release-it": {
+    "npm": {
+      "publish": true,
+      "publishPath": "./dist"
+    },
     "git": {
       "commitMessage": "chore: release v${version}",
       "changelog": "git log --pretty=format:\"* %s (%h)\" ${from}...${to}"
     },
     "github": {
-      "release": true
+      "release": true,
+      "releaseNotes": "generate-release-notes.sh ${latestVersion} ${version}"
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": "angular",
+        "infile": "CHANGELOG.md"
+      }
     }
   }
 }
