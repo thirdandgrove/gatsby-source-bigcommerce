@@ -6,7 +6,9 @@ const micro = require(`micro`);
 
 const fetch = require("node-fetch");
 
-const proxy = require("http-proxy-middleware");
+const {
+  createProxyMiddleware
+} = require("http-proxy-middleware");
 
 exports.sourceNodes = async ({
   actions,
@@ -104,7 +106,7 @@ exports.sourceNodes = async ({
 exports.onCreateDevServer = ({
   app
 }) => {
-  app.use("/___BCPreview/", proxy({
+  app.use("/___BCPreview/", createProxyMiddleware({
     target: `http://localhost:8033`,
     secure: false
   }));
